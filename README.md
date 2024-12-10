@@ -21,4 +21,4 @@ This project calculates IP subnets based on user input. It takes an IP address a
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/tu-usuario/ip-subnet-calculator.git
+   https://github.com/RaulYael3/ip-subnet-calculator.git
