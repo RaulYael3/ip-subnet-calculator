@@ -2,14 +2,22 @@ import { useState } from 'react'
 import calculateIp from '../services/calculateIp'
 
 export function Form(){
-    type IPv4 = `${number},${number},${number},${number}`
+  
+  type IPv4 = `${number},${number},${number},${number}`
+//   type maskHost = [string,number]
+
   const [ip,setIp] = useState<IPv4>()
   const [subnets, setSubnets] = useState<number>(0)
 
+  const [results,setResults] = useState<number| string | null>(null)
+
   const handleSubmit = (event : React.FormEvent) => {
     event.preventDefault()
+    setResults(null)
     if(!ip || !subnets) { alert('Por favor ingrese una ip y una subred valida'); return}
-    calculateIp(ip,subnets)
+    
+    const newMask = calculateIp(ip,subnets)
+    setResults(newMask)
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +64,10 @@ export function Form(){
             <button type="submit">Calcular Subredes</button>
           </div>
         </form>
+
+        {results &&
+            <p>{results}</p>    
+        }
     </>
   )
 }
