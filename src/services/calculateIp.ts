@@ -1,6 +1,6 @@
 type IPv4 = `${number},${number},${number},${number}`
 
-function calculateIp(ip: IPv4, host?: number, subnet?: number){
+function calculateIp(ip: IPv4, subnet?: number){
 
 
     if( !ip.split(',').every(n => 0 <= Number(n) && Number(n) <= 256 )) return 'Ha ocurrido un error, por favor cambia los numeros a entradas posibles ("0 - 256")'

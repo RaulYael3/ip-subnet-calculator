@@ -1,11 +1,13 @@
 import './App.css'
+import { Form } from './components/form'
 
 function App() {
 
+  
 
   return (
     <>
-      <h1>Ip Subnet calculator</h1>
+      <Form />
     </>
   )
 }
