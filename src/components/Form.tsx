@@ -4,16 +4,23 @@ import calculateIp from '../services/calculateIp'
 export function Form(){
   
   type IPv4 = `${number},${number},${number},${number}`
+  const objectToCalculate = {
+    ip: '',
+    maskSubnet: '',
+    isLoading: false,
+    hostBySubnet: 0,
+    error: ''
+}
 //   type maskHost = [string,number]
 
-  const [ip,setIp] = useState<IPv4>()
+  const [ip,setIp] = useState<IPv4 | string>('')
   const [subnets, setSubnets] = useState<number>(0)
 
-  const [results,setResults] = useState<number| string | null>(null)
+  const [results,setResults] = useState<typeof objectToCalculate>(objectToCalculate)
 
   const handleSubmit = (event : React.FormEvent) => {
     event.preventDefault()
-    setResults(null)
+    setResults({...objectToCalculate, isLoading:true})
     if(!ip || !subnets) { alert('Por favor ingrese una ip y una subred valida'); return}
     
     const newMask = calculateIp(ip,subnets)
@@ -65,8 +72,14 @@ export function Form(){
           </div>
         </form>
 
-        {results &&
-            <p>{results}</p>    
+        {(results.isLoading === true) &&
+            (
+                <>
+                    <p>{results.ip}</p> 
+                    <p>{results.hostBySubnet}</p>   
+                    <p>{results.maskSubnet}</p>
+                </>
+            )
         }
     </>
   )
