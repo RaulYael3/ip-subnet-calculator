@@ -30,6 +30,7 @@ export function Form(){
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value} = event.target;
+    setResults({...objectToCalculate, isLoading:false})
 
     if (name === 'ip') {
       setIp(value as IPv4);
@@ -86,7 +87,7 @@ export function Form(){
         {results.isLoading === true &&
             (
                 <>
-                    <BasicTable ip={results.ip} totalSubnets = {results.hostBySubnet + 2}/>
+                    <BasicTable ip={results.ip} totalSubnets = {results.hostBySubnet + 2} subnets={subnets}/>
                 </>
             )
         }

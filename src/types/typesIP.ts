@@ -26,4 +26,5 @@ export type Rows = string[]
 export interface BasicTableProps {
     ip: string;
     totalSubnets: number;
+    subnets: number;
 }
