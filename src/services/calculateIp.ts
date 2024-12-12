@@ -1,14 +1,10 @@
-type IPv4 = `${number},${number},${number},${number}`
-const objectToCalculate = {
-    ip: '',
-    maskSubnet: '',
-    isLoading: false,
-    hostBySubnet: 0,
-    error: ''
-}
+import { createData } from "../components/Table"
+import { CalculationResult, defaultObjectToCalculate as objectToCalculate, IPv4 } from '../types/typesIP';
+
+
 // type maskHost = [`${string}`,number]
 
-function calculateIp(ip: IPv4 | string, subnet?: number): typeof objectToCalculate{
+function calculateIp(ip: IPv4 | string, subnet?: number): CalculationResult{
     
     //------------------------------------------------------------
     //Check that the function inputs are in the range of 0 to 255.
@@ -36,6 +32,14 @@ function calculateIp(ip: IPv4 | string, subnet?: number): typeof objectToCalcula
     const newMaskSubnet:string = newMaskkBits.map(bits => {return parseInt(bits,2)}).join('.')
     
     const hostBySubnet = totalSubnets - 2 
+    
+    createData({
+        networkIP: ip,
+        ipRangeStart: ip,
+        ipRangeEnd: ip,
+        broadCast: ip,
+      });
+      
     
     return {...objectToCalculate, 
         ip: ip, 
