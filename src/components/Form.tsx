@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import calculateIp from '../services/calculateIp'
+import BasicTable from './Table'
 
 export function Form(){
   
@@ -78,6 +79,14 @@ export function Form(){
                     <p>{results.ip}</p> 
                     <p>{results.hostBySubnet}</p>   
                     <p>{results.maskSubnet}</p>
+                </>
+            )
+        }
+
+        {results.isLoading === true &&
+            (
+                <>
+                    <BasicTable/>
                 </>
             )
         }

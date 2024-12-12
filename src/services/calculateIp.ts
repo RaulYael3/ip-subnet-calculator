@@ -8,7 +8,7 @@ const objectToCalculate = {
 }
 // type maskHost = [`${string}`,number]
 
-function calculateIp(ip: IPv4, subnet?: number): typeof objectToCalculate{
+function calculateIp(ip: IPv4 | string, subnet?: number): typeof objectToCalculate{
     
     //------------------------------------------------------------
     //Check that the function inputs are in the range of 0 to 255.
