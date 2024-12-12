@@ -86,7 +86,7 @@ export function Form(){
         {results.isLoading === true &&
             (
                 <>
-                    <BasicTable/>
+                    <BasicTable ip={results.ip} totalSubnets = {results.hostBySubnet + 2}/>
                 </>
             )
         }

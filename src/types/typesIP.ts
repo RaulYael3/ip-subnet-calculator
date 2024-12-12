@@ -17,9 +17,13 @@ export const defaultObjectToCalculate: CalculationResult = {
   error: '',
 }
 
-export interface DataInput {
-    networkIP: IPv4 | string;
-    ipRangeStart: IPv4 | string;
-    ipRangeEnd: IPv4 | string;
-    broadCast: IPv4 | string;
+export interface DataInput { 
+    ips: (IPv4 | string)[];
   }
+
+export type Rows = string[]
+
+export interface BasicTableProps {
+    ip: string;
+    totalSubnets: number;
+}

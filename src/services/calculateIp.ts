@@ -1,5 +1,4 @@
-import { createData } from "../components/Table"
-import { CalculationResult, defaultObjectToCalculate as objectToCalculate, IPv4 } from '../types/typesIP';
+import { CalculationResult, defaultObjectToCalculate as objectToCalculate, IPv4 } from '../types/typesIP.ts';
 
 
 // type maskHost = [`${string}`,number]
@@ -19,28 +18,19 @@ function calculateIp(ip: IPv4 | string, subnet?: number): CalculationResult{
     
 
     //------------------------------------------------
-    //Calculate how many parts the IP is divided into.
+    //Calculate how many parts the IP is divided into and how many hosts each network has..
     let [totalSubnets, x] = [0,0]
     if(subnet) {
         x = 32 - (mask + Math.ceil(Math.log2(subnet)))
         totalSubnets = 2 ** x
     }
+    const hostBySubnet = totalSubnets - 2 
     
     
     const newBits = "1".repeat(mask) + "1".repeat(x) + "0".repeat(32 - mask)
     const newMaskkBits = [ newBits.slice(0, 8), newBits.slice(8, 16), newBits.slice(16, 24), newBits.slice(24, 32) ]
     const newMaskSubnet:string = newMaskkBits.map(bits => {return parseInt(bits,2)}).join('.')
-    
-    const hostBySubnet = totalSubnets - 2 
-    
-    createData({
-        networkIP: ip,
-        ipRangeStart: ip,
-        ipRangeEnd: ip,
-        broadCast: ip,
-      });
-      
-    
+          
     return {...objectToCalculate, 
         ip: ip, 
         maskSubnet:newMaskSubnet, 
