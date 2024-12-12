@@ -27,7 +27,7 @@ function calculateIp(ip: IPv4 | string, subnet?: number): CalculationResult{
     const hostBySubnet = totalSubnets - 2 
     
     
-    const newBits = "1".repeat(mask) + "1".repeat(x) + "0".repeat(32 - mask)
+    const newBits = "1".repeat((mask + Math.ceil(Math.log2(subnet??1)))) + "0".repeat(32 - mask)
     const newMaskkBits = [ newBits.slice(0, 8), newBits.slice(8, 16), newBits.slice(16, 24), newBits.slice(24, 32) ]
     const newMaskSubnet:string = newMaskkBits.map(bits => {return parseInt(bits,2)}).join('.')
           
