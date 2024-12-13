@@ -12,7 +12,6 @@ export function Form(){
     hostBySubnet: 0,
     error: ''
 }
-//   type maskHost = [string,number]
 
   const [ip,setIp] = useState<IPv4 | string>('')
   const [subnets, setSubnets] = useState<number>(0)
@@ -21,9 +20,9 @@ export function Form(){
 
   const handleSubmit = (event : React.FormEvent) => {
     event.preventDefault()
-    setResults({...objectToCalculate, isLoading:true})
     if(!ip || !subnets) { alert('Por favor ingrese una ip y una subred valida'); return}
-    
+    setResults({...objectToCalculate, isLoading:true})
+
     const newMask = calculateIp(ip,subnets)
     setResults(newMask)
   }
@@ -43,7 +42,7 @@ export function Form(){
     <>
       <h1>Ip Subnet calculator</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='form'>
         <div>
             <label htmlFor="ip">IP:</label>
             <input
@@ -62,7 +61,7 @@ export function Form(){
               type="number"
               id="subnets"
               name="subnets"
-              value={subnets}
+              value={subnets=== 0?'': subnets}
               onChange={handleInputChange}
               min="1"
               placeholder="Número de subredes"
@@ -74,21 +73,16 @@ export function Form(){
           </div>
         </form>
 
-        {(results.isLoading === true) &&
+        {(results.isLoading === true) ?
             (
-                <>
-                    <p>{results.ip}</p> 
-                    <p>{results.hostBySubnet}</p>   
-                    <p>{results.maskSubnet}</p>
-                </>
-            )
-        }
-
-        {results.isLoading === true &&
-            (
-                <>
+                <main>
+                    <p>IP: {results.ip}</p> 
+                    <p>Hosts by subnet{results.hostBySubnet}</p>   
+                    <p>Mask Subnet{results.maskSubnet}</p>
                     <BasicTable ip={results.ip} totalSubnets = {results.hostBySubnet + 2} subnets={subnets}/>
-                </>
+                </main>
+            ):(
+              <p>Aun no se ingresa ningun valor</p>
             )
         }
     </>

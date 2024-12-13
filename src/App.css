@@ -1,42 +1,80 @@
 #root {
-  max-width: 1280px;
+
+  width: 100vw;
+  height: 100lvh;
+  display: grid;
+  grid-template-areas: 
+    "aside title"
+    "aside results"
+  ;
+  grid-template-columns: 400px 1fr;
+  grid-template-rows: auto 1fr
+}
+
+.form {
+  grid-area: aside;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+  max-width: 400px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  & >div{
+    display: flex;
+    flex-direction: column;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+input {
+  width: 80%; /* Hacer que los inputs ocupen todo el ancho del contenedor */
+  padding: 12px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de fuente */
+  border: 2px solid #ccc; /* Borde gris claro */
+  border-radius: 8px; /* Bordes redondeados */
+  background-color: #f9f9f9; /* Color de fondo claro */
+  transition: all 0.3s ease; /* Transición suave para cambios */
+  color:#333; 
 }
 
-.card {
-  padding: 2em;
+/* Estilo cuando el input tiene el foco (es seleccionado) */
+input:focus {
+  border-color: #4CAF50; /* Cambiar borde a verde cuando tiene foco */
+  background-color: #fff; /* Fondo blanco cuando el input está enfocado */
+  outline: none; /* Eliminar el borde azul por defecto del navegador */
 }
 
-.read-the-docs {
-  color: #888;
+/* Estilo para los labels */
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Estilo adicional para el input de tipo 'number' */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Elimina los botones de incremento y decremento en Webkit */
+}
+
+/* Estilo para el placeholder */
+input::placeholder {
+  color: #aaa; /* Color gris para el texto del placeholder */
+  font-style: italic;
+}
+
+h1{
+  grid-area: title;
+
+}
+
+main{
+  grid-area: results;
 }
