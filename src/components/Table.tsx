@@ -8,7 +8,7 @@ export default function BasicTable({ip, totalSubnets, subnets}: BasicTableProps)
   const rows = fillTables(ip as IPv4, totalSubnets, subnets)
 
   return (
-    <TableContainer component={Paper} className='table'>
+    <TableContainer component={Paper} className='table' style={{width: '80%'}}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
         <TableRow>

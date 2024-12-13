@@ -76,9 +76,9 @@ export function Form(){
         {(results.isLoading === true) ?
             (
                 <main>
-                    <p>IP: {results.ip}</p> 
-                    <p>Hosts by subnet{results.hostBySubnet}</p>   
-                    <p>Mask Subnet{results.maskSubnet}</p>
+                    <p><b>IP:</b> {results.ip}</p> 
+                    <p><b>Hosts by subnet:</b> {results.hostBySubnet.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>   
+                    <p><b>Mask Subnet:</b>  {results.maskSubnet}</p>
                     <BasicTable ip={results.ip} totalSubnets = {results.hostBySubnet + 2} subnets={subnets}/>
                 </main>
             ):(
