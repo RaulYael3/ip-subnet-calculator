@@ -79,10 +79,18 @@ export function Form(){
                     <p><b>IP:</b> {results.ip}</p> 
                     <p><b>Hosts by subnet:</b> {results.hostBySubnet.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>   
                     <p><b>Mask Subnet:</b>  {results.maskSubnet}</p>
+                    {
+                      subnets > 5 
+                        ? <i>Se divide en {subnets} redes, pero solo se muestran las primeras 5</i>
+                        : <br />
+                    }
+
                     <BasicTable ip={results.ip} totalSubnets = {results.hostBySubnet + 2} subnets={subnets}/>
                 </main>
             ):(
-              <p>Aun no se ingresa ningun valor</p>
+              results.error !== '' 
+                ? <p>{results.error}</p>
+                : <p>Aun no se ingresa ningun valor</p>
             )
         }
     </>
