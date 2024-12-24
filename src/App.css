@@ -78,3 +78,22 @@ h1{
 main{
   grid-area: results;
 }
+
+.radio-content{
+  display: flex;
+  align-self: start;
+  gap: 20px;
+  & *{
+    cursor: pointer;
+  }
+}
+.input-radio{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+input[type="radio"]{
+  accent-color: #535bf2;
+}

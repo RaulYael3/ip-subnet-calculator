@@ -1,6 +1,7 @@
 import { CalculationResult, defaultObjectToCalculate as objectToCalculate, IPv4 } from '../types/typesIP.ts';
 
-function calculateIp(ip: IPv4 | string, subnet?: number): CalculationResult{
+function calculateIp(ip: IPv4 | string, [type,subnet] : [type:'sub'|'host',subnet:number]): CalculationResult{
+    console.log(type, subnet)
     
     //------------------------------------------------------------
     //Check that the function inputs are in the range of 0 to 255.
@@ -18,11 +19,18 @@ function calculateIp(ip: IPv4 | string, subnet?: number): CalculationResult{
     //-------------------------------------------------------------------------------------
     //Calculate how many parts the IP is divided into and how many hosts each network has..
     let [totalSubnets, totalBits] = [0,0]
-    if(subnet) {
-        totalBits = 32 - (mask + Math.ceil(Math.log2(subnet)))
-        totalSubnets = 2 ** totalBits
-    }
-    const hostBySubnet = totalSubnets - 2 
+    let hostBySubnet = 0
+    if(type === 'sub') {
+        totalBits = Math.ceil(Math.log2(subnet))
+        hostBySubnet = (2** (32 - (mask  + totalBits)))- 2 
+    } 
+    else if(type === 'host'){
+        totalBits = Math.ceil(Math.log2(subnet + 2))
+        hostBySubnet = Math.pow(2,totalBits) - 2
+    }   
+    totalSubnets = Math.pow(2,totalBits)
+    console.log(totalSubnets)
+
     
     
     const newBits = "1".repeat((mask + Math.ceil(Math.log2(subnet??1)))) + "0".repeat(32 - mask)
@@ -31,7 +39,8 @@ function calculateIp(ip: IPv4 | string, subnet?: number): CalculationResult{
           
     return {...objectToCalculate, 
         ip: ip, 
-        maskSubnet:newMaskSubnet, 
+        maskSubnet:newMaskSubnet,
+        hostOrSubnet: type,
         hostBySubnet: hostBySubnet,
         isLoading:true
     }

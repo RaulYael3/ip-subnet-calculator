@@ -4,6 +4,7 @@ export interface CalculationResult {
   ip: string;
   maskSubnet: string;
   isLoading: boolean;
+  hostOrSubnet: 'sub' | 'host' | '';
   hostBySubnet: number;
   error: string;
 }
@@ -13,6 +14,7 @@ export const defaultObjectToCalculate: CalculationResult = {
   ip: '',
   maskSubnet: '',
   isLoading: false,
+  hostOrSubnet: '',
   hostBySubnet: 0,
   error: '',
 }

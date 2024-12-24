@@ -9,6 +9,7 @@ export function Form(){
     ip: '',
     maskSubnet: '',
     isLoading: false,
+    hostOrSubnet: '',
     hostBySubnet: 0,
     error: ''
 }
@@ -20,16 +21,23 @@ export function Form(){
 
   const handleSubmit = (event : React.FormEvent) => {
     event.preventDefault()
-    if(!ip || !subnets) { alert('Por favor ingrese una ip y una subred valida'); return}
+    
+    if(!ip || !subnets || results.hostOrSubnet === '') { alert('Por favor ingrese una ip y una subred valida'); return}
     setResults({...objectToCalculate, isLoading:true})
 
-    const newMask = calculateIp(ip,subnets)
+    const newMask = calculateIp(ip,[results.hostOrSubnet as 'sub'|'host',subnets])
     setResults(newMask)
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value} = event.target;
+
+    const {name, value} = event.target;
     setResults({...objectToCalculate, isLoading:false})
+
+    setResults({
+      ...objectToCalculate, 
+      hostOrSubnet: value
+    })
 
     if (name === 'ip') {
       setIp(value as IPv4);
@@ -37,6 +45,7 @@ export function Form(){
       setSubnets(Number(value));
     }
   }
+
 
   return (
     <>
@@ -56,7 +65,9 @@ export function Form(){
           </div>
 
           <div>
-            <label htmlFor="subnets">Cantidad de subredes:</label>
+
+
+            <label htmlFor="subnets">Cantidad a calcular:</label>
             <input
               type="number"
               id="subnets"
@@ -67,6 +78,20 @@ export function Form(){
               placeholder="Número de subredes"
             />
           </div>
+
+          <section className='radio-content'>
+
+            <div className='input-radio'>
+              <input type="radio" id="subredes" name="tipo" value="sub" checked={results.hostOrSubnet === 'sub'}  onChange={handleInputChange}  /> 
+              <label htmlFor="subredes">Subredes</label>
+            </div>
+
+            <div className='input-radio'>
+              <input type="radio" id="hosts" name="tipo" value="host" checked={results.hostOrSubnet === 'host'} onChange={handleInputChange}/> 
+              <label htmlFor="hosts">Hosts</label> 
+            </div>
+
+          </section>
 
           <div>
             <button type="submit">Calcular Subredes</button>
