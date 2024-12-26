@@ -1,7 +1,6 @@
 import { CalculationResult, defaultObjectToCalculate as objectToCalculate, IPv4 } from '../types/typesIP.ts';
 
 function calculateIp(ip: IPv4 | string, [type,subnet] : [type:'sub'|'host',subnet:number]): CalculationResult{
-    console.log(type, subnet)
     
     //------------------------------------------------------------
     //Check that the function inputs are in the range of 0 to 255.
@@ -29,7 +28,6 @@ function calculateIp(ip: IPv4 | string, [type,subnet] : [type:'sub'|'host',subne
         hostBySubnet = Math.pow(2,totalBits) - 2
     }   
     totalSubnets = Math.pow(2,totalBits)
-    console.log(totalSubnets)
 
     
     
@@ -42,7 +40,8 @@ function calculateIp(ip: IPv4 | string, [type,subnet] : [type:'sub'|'host',subne
         maskSubnet:newMaskSubnet,
         hostOrSubnet: type,
         hostBySubnet: hostBySubnet,
-        isLoading:true
+        isLoading:true,
+        totalSubnets: totalSubnets
     }
     
 }

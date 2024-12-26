@@ -11,7 +11,8 @@ export function Form(){
     isLoading: false,
     hostOrSubnet: '',
     hostBySubnet: 0,
-    error: ''
+    error: '',
+    totalSubnets: 0
 }
 
   const [ip,setIp] = useState<IPv4 | string>('')
@@ -20,6 +21,7 @@ export function Form(){
   const [results,setResults] = useState<typeof objectToCalculate>(objectToCalculate)
 
   const handleSubmit = (event : React.FormEvent) => {
+
     event.preventDefault()
     
     if(!ip || !subnets || results.hostOrSubnet === '') { alert('Por favor ingrese una ip y una subred valida'); return}
@@ -27,6 +29,7 @@ export function Form(){
 
     const newMask = calculateIp(ip,[results.hostOrSubnet as 'sub'|'host',subnets])
     setResults(newMask)
+
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,16 +37,17 @@ export function Form(){
     const {name, value} = event.target;
     setResults({...objectToCalculate, isLoading:false})
 
-    setResults({
-      ...objectToCalculate, 
-      hostOrSubnet: value
-    })
-
     if (name === 'ip') {
       setIp(value as IPv4);
     } else if (name === 'subnets') {
       setSubnets(Number(value));
+    } else if (name === 'tipo') {
+      setResults({
+        ...objectToCalculate, 
+        hostOrSubnet: value
+      })
     }
+
   }
 
 
@@ -106,11 +110,11 @@ export function Form(){
                     <p><b>Mask Subnet:</b>  {results.maskSubnet}</p>
                     {
                       subnets > 5 
-                        ? <i>Se divide en {subnets} redes, pero solo se muestran las primeras 5</i>
+                        ? <i>Se divide en {results.totalSubnets} redes, pero solo se muestran las primeras 5</i>
                         : <br />
                     }
 
-                    <BasicTable ip={results.ip} totalSubnets = {results.hostBySubnet + 2} subnets={subnets}/>
+                    <BasicTable ip={results.ip} totalSubnets = {results.totalSubnets} subnets={subnets} type={results.hostOrSubnet as 'sub' | 'host'}/>
                 </main>
             ):(
               results.error !== '' 

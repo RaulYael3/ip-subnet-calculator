@@ -7,6 +7,7 @@ export interface CalculationResult {
   hostOrSubnet: 'sub' | 'host' | '';
   hostBySubnet: number;
   error: string;
+  totalSubnets :number ;
 }
   
   
@@ -17,6 +18,7 @@ export const defaultObjectToCalculate: CalculationResult = {
   hostOrSubnet: '',
   hostBySubnet: 0,
   error: '',
+  totalSubnets: 0
 }
 
 export interface DataInput { 
@@ -29,4 +31,5 @@ export interface BasicTableProps {
     ip: string;
     totalSubnets: number;
     subnets: number;
+    type:'sub' | 'host'
 }
