@@ -71,7 +71,7 @@ export function Form(){
           <div>
 
 
-            <label htmlFor="subnets">Cantidad a calcular:</label>
+            <label htmlFor="subnets">Value to calculate:</label>
             <input
               type="number"
               id="subnets"
@@ -87,7 +87,7 @@ export function Form(){
 
             <div className='input-radio'>
               <input type="radio" id="subredes" name="tipo" value="sub" checked={results.hostOrSubnet === 'sub'}  onChange={handleInputChange}  /> 
-              <label htmlFor="subredes">Subredes</label>
+              <label htmlFor="subredes">Subnets</label>
             </div>
 
             <div className='input-radio'>
@@ -98,7 +98,7 @@ export function Form(){
           </section>
 
           <div>
-            <button type="submit">Calcular Subredes</button>
+            <button type="submit">Calculate Subnets</button>
           </div>
         </form>
 
@@ -110,7 +110,7 @@ export function Form(){
                     <p><b>Mask Subnet:</b>  {results.maskSubnet}</p>
                     {
                       subnets > 5 
-                        ? <i>Se divide en {results.totalSubnets} redes, pero solo se muestran las primeras 5</i>
+                        ? <i>It is divided into {results.totalSubnets} networks, but only the first 5 are shown</i>
                         : <br />
                     }
 
@@ -119,7 +119,7 @@ export function Form(){
             ):(
               results.error !== '' 
                 ? <p>{results.error}</p>
-                : <p>Aun no se ingresa ningun valor</p>
+                : <p>No value entered yet</p>
             )
         }
     </>
