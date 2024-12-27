@@ -9,27 +9,58 @@ export default function fillTables(ip: IPv4, totalSubnets: number, subnet: numbe
     }
 
     const rows = []
-    for (let i = 0; i < Math.min(5, subnet); i++) {
-        const subNetwork = [...manipulableIP]
-        const networkStart = [...subNetwork]
-        const networkEnd = [...subNetwork]
-        const broadcast = [...subNetwork]
-        
-        networkStart[3]++;
-        if (indexFinded < 3) {
-            networkEnd[3] = 254
-            broadcast[3] = 255
-        } else {
-            networkEnd[3] += totalSubnets - 2
-            broadcast[3] += totalSubnets - 1
-        }
+    if(type === 'sub'){
 
-        manipulableIP[indexFinded < 3 ? indexFinded : 3] += totalSubnets
-        
-        rows.push({
-            ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')]
-        })
-        
+        for (let i = 0; i < Math.min(5, subnet); i++) {
+            const subNetwork = [...manipulableIP]
+            const networkStart = [...subNetwork]
+            const networkEnd = [...subNetwork]
+            const broadcast = [...subNetwork]
+            
+            networkStart[3]++;
+            if (indexFinded < 3) {
+                networkEnd[3] = 254
+                broadcast[3] = 255
+            } else {
+                networkEnd[3] += totalSubnets - 2
+                broadcast[3] += totalSubnets - 1
+            }
+            
+            manipulableIP[indexFinded < 3 ? indexFinded : 3] += totalSubnets
+            
+            rows.push({
+                ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')]
+            })
+            
+        }
+    } else {
+        let i = 0
+        let currOCtate = 3
+        const subNetwork = [...manipulableIP]
+        while (i < 5) {
+            const networkStart = [...subNetwork]
+            const networkEnd = [...subNetwork]
+            const broadcast = [...subNetwork]
+
+            networkStart[currOCtate]++
+            networkEnd[currOCtate] += subnet - 2
+            broadcast[currOCtate] += subnet - 1
+
+            rows.push({
+                ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')]
+            })
+
+            i++
+            subNetwork[3] += subnet
+
+            if(subNetwork[3] === 255){
+                subNetwork[3] = 0
+                subNetwork[currOCtate]++
+                if(subNetwork[currOCtate] === 255){
+                    currOCtate-- 
+                }
+            }
+        }
     }
 
 
