@@ -35,31 +35,31 @@ export default function fillTables(ip: IPv4, totalSubnets: number, subnet: numbe
         }
     } else {
         let i = 0
-        let currOCtate = 3
+        let currOCtate = 2
         const subNetwork = [...manipulableIP]
         while (i < 5) {
             const networkStart = [...subNetwork]
             const networkEnd = [...subNetwork]
             const broadcast = [...subNetwork]
 
-            networkStart[currOCtate]++
-            networkEnd[currOCtate] += subnet - 2
-            broadcast[currOCtate] += subnet - 1
+            networkStart[3]++
+            networkEnd[3] += subnet - 3
+            broadcast[3] += subnet - 2
 
             rows.push({
                 ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')]
             })
 
             i++
-            subNetwork[3] += subnet
-
-            if(subNetwork[3] === 255){
+            
+            subNetwork[3] += subnet - 1     
+            if(broadcast[3] === 255){
                 subNetwork[3] = 0
                 subNetwork[currOCtate]++
                 if(subNetwork[currOCtate] === 255){
                     currOCtate-- 
                 }
-            }
+            } 
         }
     }
 
