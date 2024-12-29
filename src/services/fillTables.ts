@@ -1,69 +1,66 @@
-import { IPv4 } from "../types/typesIP.ts";
+import { IPv4 } from "../types/typesIP.ts"
 
-export default function fillTables(ip: IPv4, totalSubnets: number, subnet: number, type :'sub' | 'host'){
+function splitIP(ip: IPv4): number[] {
+  return ip.split('.').map(Number)
+}
 
-    const manipulableIP = ip.split('.').map(Number)
-    const indexFinded = manipulableIP.findIndex(num => num === 0)
-    while(totalSubnets > 256){
-         totalSubnets = Math.ceil(totalSubnets / 256)
-    }
+function findZeroIndex(ipArray: number[]): number {
+  return ipArray.findIndex(num => num === 0)
+}
 
-    const rows = []
-    if(type === 'sub'){
+function adjustTotalSubnets(totalSubnets: number): number {
+  while (totalSubnets > 256) {
+    totalSubnets = Math.ceil(totalSubnets / 256)
+  }
+  return totalSubnets
+}
 
-        for (let i = 0; i < Math.min(5, subnet); i++) {
-            const subNetwork = [...manipulableIP]
-            const networkStart = [...subNetwork]
-            const networkEnd = [...subNetwork]
-            const broadcast = [...subNetwork]
-            
-            networkStart[3]++;
-            if (indexFinded < 3) {
-                networkEnd[3] = 254
-                broadcast[3] = 255
-            } else {
-                networkEnd[3] += totalSubnets - 2
-                broadcast[3] += totalSubnets - 1
-            }
-            
-            manipulableIP[indexFinded < 3 ? indexFinded : 3] += totalSubnets
-            
-            rows.push({
-                ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')]
-            })
-            
+function createRow(ipArray: number[], totalSubnets: number, type: 'sub' | 'host', indexFinded: number, currOctate: number): { ips: string[] }[] {
+  const rows: { ips: string[] }[] = []
+  const subNetwork = [...ipArray]
+
+  for (let i = 0; i < Math.min(5, totalSubnets); i++) {
+    const networkStart = [...subNetwork]
+    const networkEnd = [...subNetwork]
+    const broadcast = [...subNetwork]
+
+    if (type === 'host') {
+      networkStart[3]++
+      networkEnd[3] += totalSubnets - 2
+      broadcast[3] += totalSubnets - 1
+
+      if (broadcast[3] === 255) {
+        subNetwork[3] = 0
+        subNetwork[currOctate]++
+        if (subNetwork[currOctate] === 255) {
+          currOctate--
         }
+      }
+
+      rows.push({ ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')] })
+      subNetwork[3] += totalSubnets
     } else {
-        let i = 0
-        let currOCtate = 2
-        const subNetwork = [...manipulableIP]
-        while (i < 5) {
-            const networkStart = [...subNetwork]
-            const networkEnd = [...subNetwork]
-            const broadcast = [...subNetwork]
+      networkStart[3]++
+      if (indexFinded < 3) {
+        networkEnd[3] = 254
+        broadcast[3] = 255
+      } else {
+        networkEnd[3] += totalSubnets - 2
+        broadcast[3] += totalSubnets - 1
+      }
 
-            networkStart[3]++
-            networkEnd[3] += subnet - 3
-            broadcast[3] += subnet - 2
-
-            rows.push({
-                ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')]
-            })
-
-            i++
-            
-            subNetwork[3] += subnet - 1     
-            if(broadcast[3] === 255){
-                subNetwork[3] = 0
-                subNetwork[currOCtate]++
-                if(subNetwork[currOCtate] === 255){
-                    currOCtate-- 
-                }
-            } 
-        }
+      rows.push({ ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')] })
+      ipArray[indexFinded < 3 ? indexFinded : 3] += totalSubnets
     }
+  }
 
+  return rows
+}
 
-    return rows
+export default function fillTables(ip: IPv4, totalSubnets: number, type: 'sub' | 'host') {
+  const manipulableIP = splitIP(ip)
+  const indexFinded = findZeroIndex(manipulableIP)
+  const adjustedSubnets = adjustTotalSubnets(totalSubnets)
 
+  return createRow(manipulableIP, adjustedSubnets, type, indexFinded, 2)
 }

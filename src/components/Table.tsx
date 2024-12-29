@@ -3,9 +3,9 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { BasicTableProps, IPv4 } from '../types/typesIP';
 import fillTables from '../services/fillTables';
 
-export default function BasicTable({ip, totalSubnets, subnets, type}: BasicTableProps) {
+export default function BasicTable({ip, totalSubnets, type}: BasicTableProps) {
 
-  const rows = fillTables(ip as IPv4, totalSubnets, subnets, type)
+  const rows = fillTables(ip as IPv4, totalSubnets, type)
 
   return (
     <TableContainer component={Paper} className='table' style={{width: '80%'}}>
