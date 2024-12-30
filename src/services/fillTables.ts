@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { IPv4 } from "../types/typesIP.ts"
 
 function splitIP(ip: IPv4): number[] {
@@ -15,31 +16,64 @@ function adjustTotalSubnets(totalSubnets: number): number {
   return totalSubnets
 }
 
-function createRow(ipArray: number[], totalSubnets: number, type: 'sub' | 'host', indexFinded: number, currOctate: number): { ips: string[] }[] {
+function createRow(
+          ipArray: number[], 
+          totalSubnets: number, 
+          type: 'sub' | 'host', 
+          indexFinded: number, 
+          currOctate: number,
+          subnet: number
+        ): { ips: string[] }[] 
+            {
+
   const rows: { ips: string[] }[] = []
   const subNetwork = [...ipArray]
-
-  for (let i = 0; i < Math.min(5, totalSubnets); i++) {
-    const networkStart = [...subNetwork]
-    const networkEnd = [...subNetwork]
-    const broadcast = [...subNetwork]
-
+  let changeIndex =3
+  
+  
+  for (let i = 0; i < Math.min(20, totalSubnets); i++) {
+    
     if (type === 'host') {
+      const networkStart = [...subNetwork]
+      const broadcast = [...subNetwork]
+      if(subnet > 255){
+        subnet = totalSubnets / 255
+        changeIndex = 2
+        if(subnet >255) { changeIndex = 1}
+      }
+      
       networkStart[3]++
-      networkEnd[3] += totalSubnets - 2
-      broadcast[3] += totalSubnets - 1
-
-      if (broadcast[3] === 255) {
-        subNetwork[3] = 0
-        subNetwork[currOctate]++
+       
+      changeIndex !== 3 
+      ? (broadcast[changeIndex] += totalSubnets - 1,
+        broadcast[3] = 255)
+        : (broadcast[3] += totalSubnets - 1)
+        
+        
+      const networkEnd = [...broadcast]
+      networkEnd[3]--
+      
+      rows.push({ ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')] })
+      
+      subNetwork[changeIndex] += totalSubnets
+      
+      if (subNetwork[changeIndex] >= 255) {
+        subNetwork[changeIndex] = 0 
+        subNetwork[currOctate]  === 0 ? (subNetwork[currOctate] = 0) : subNetwork[currOctate]++
+        subNetwork[changeIndex - 1]++
         if (subNetwork[currOctate] === 255) {
           currOctate--
+          console.log('kkk')
         }
       }
 
-      rows.push({ ips: [subNetwork.join('.'), networkStart.join('.'), networkEnd.join('.'), broadcast.join('.')] })
-      subNetwork[3] += totalSubnets
-    } else {
+    } 
+    else
+    {  
+      const subNetwork = [...ipArray]
+      const networkStart = [...subNetwork]
+      const broadcast = [...subNetwork]
+      const networkEnd = [...broadcast]
       networkStart[3]++
       if (indexFinded < 3) {
         networkEnd[3] = 254
@@ -57,10 +91,10 @@ function createRow(ipArray: number[], totalSubnets: number, type: 'sub' | 'host'
   return rows
 }
 
-export default function fillTables(ip: IPv4, totalSubnets: number, type: 'sub' | 'host') {
+export default function fillTables(ip: IPv4, totalSubnets: number, type: 'sub' | 'host', subnets:number) {
   const manipulableIP = splitIP(ip)
   const indexFinded = findZeroIndex(manipulableIP)
   const adjustedSubnets = adjustTotalSubnets(totalSubnets)
 
-  return createRow(manipulableIP, adjustedSubnets, type, indexFinded, 2)
+  return createRow(manipulableIP, adjustedSubnets, type, indexFinded, 2, subnets)
 }
